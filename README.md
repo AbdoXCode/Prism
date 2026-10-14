@@ -111,28 +111,37 @@ VITE_API_URL=
 `/ask` emits `event: token` per token, then `event: sources`, then
 `event: done` (or `event: error`).
 
-## Deploy
+## Limitations
 
-### Backend → Render
+### 4.5 MB upload cap when deployed on Vercel
 
-| Setting | Value |
-|---|---|
-| Root Directory | `backend` |
-| Build Command | `pip install -r requirements.txt` |
-| Start Command | `uvicorn main:app --host 0.0.0.0 --port $PORT` |
-| Instance Type | Free (512 MB) — the backend uses ~14 MB |
+Vercel caps request bodies at **4.5 MB**. `POST /upload` sends the PDF as the
+request body, so any file larger than that is rejected at Vercel's edge with
+`413 FUNCTION_PAYLOAD_TOO_LARGE` — the request never reaches FastAPI, Supabase,
+or Gemini.
 
-### Frontend → Vercel
+Browsers surface this as the generic `Failed to fetch` rather than a readable
+error, because Vercel closes the connection while the upload is still in
+progress and `fetch()` never receives a status it can inspect.
 
-| Setting | Value |
-|---|---|
-| Root Directory | `frontend` |
-| Build Command | `npm run build` |
-| Output Directory | `dist` |
+**This is a Vercel platform rule and cannot be raised by configuration** — no
+`vercel.json` setting, plan upgrade, or header removes it. Most scanned PDFs
+exceed 4.5 MB, so expect it to trigger often in practice.
 
-Then set `VITE_API_URL` on Vercel to your Render URL, and add your Vercel
-URL to `CORS_ORIGINS` on Render. **That second step is easy to miss — without
-it the browser blocks every request.**
+### Need bigger files? Host the backend yourself
+
+The cap exists only in Vercel's infrastructure. Run the backend on your own
+machine and it disappears:
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+```
+
+Leave `VITE_API_URL` empty in `frontend/.env` — the Vite dev proxy forwards
+`/upload` straight to FastAPI with no size limit beyond your own disk and RAM.
+The same applies to any server you control: the limit is Vercel's, not Prism's.
 
 ## License
 
