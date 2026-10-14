@@ -1,0 +1,41 @@
+# ============================================================
+# Backend-specific ignores (FastAPI + Python)
+# ============================================================
+# The repo-root .gitignore already covers secrets (.env*).
+# The .env rule is repeated here so this folder stays safe
+# even if git is initialized inside backend/ alone.
+
+# --- Secrets (defense in depth) ---------------------------
+.env*
+!.env.example
+
+# --- Virtual environments ---------------------------------
+.venv/
+venv/
+env/
+ENV/
+
+# --- Python bytecode --------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# --- Packaging --------------------------------------------
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Test / lint / type caches ----------------------------
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Local model cache ------------------------------------
+# SentenceTransformers downloads intfloat/multilingual-e5-small
+# (~470 MB) here if HF_HOME or SENTENCE_TRANSFORMERS_HOME is set.
+.cache/
+models/

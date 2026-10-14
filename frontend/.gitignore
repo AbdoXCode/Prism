@@ -1,0 +1,21 @@
+# ============================================================
+# Frontend-specific ignores (Vite + React + TypeScript)
+# ============================================================
+# The repo-root .gitignore already covers secrets (.env*).
+# The .env rule is repeated here so this folder stays safe
+# even if git is initialized inside frontend/ alone.
+
+# --- Secrets (defense in depth) ---------------------------
+.env*
+!.env.example
+
+# --- Dependencies -----------------------------------------
+node_modules/
+
+# --- Build output / caches --------------------------------
+dist/
+*.tsbuildinfo
+.vite/
+
+# --- Local env overrides ----------------------------------
+*.local
