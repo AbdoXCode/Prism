@@ -114,7 +114,12 @@ export function DocsPanel({ docs, onFiles, compact = false, selectedKeys = [], o
               return (
                 <li
                   key={d.key}
-                  dir="auto"
+                  /* Layout direction, not text direction: dir="auto" would flip
+                     the whole flex row RTL for an Arabic filename and move the
+                     delete button to the left. Force LTR so the tick stays left
+                     and delete always stays right; the filename carries its own
+                     dir="auto" below for correct Arabic rendering. */
+                  dir="ltr"
                   className={`flex items-start gap-1.5 rounded-lg border p-2.5 transition-colors ${
                     selected
                       ? "border-emerald-500 bg-emerald-500/10"
@@ -145,7 +150,7 @@ export function DocsPanel({ docs, onFiles, compact = false, selectedKeys = [], o
                       <span className="flex items-start justify-between gap-2">
                         <span className="flex min-w-0 flex-1 items-center gap-1.5 truncate text-[13px] font-medium text-zinc-100" title={d.filename}>
                           <FileText size={14} className="shrink-0 text-zinc-400" />
-                          <span className="min-w-0 flex-1 truncate">{d.filename}</span>
+                          <span dir="auto" className="min-w-0 flex-1 truncate">{d.filename}</span>
                         </span>
                         <span className={statusPill(d.status)}>
                           <span
