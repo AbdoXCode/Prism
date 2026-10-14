@@ -142,7 +142,3 @@ uvicorn main:app --reload --port 8000
 Leave `VITE_API_URL` empty in `frontend/.env` — the Vite dev proxy forwards
 `/upload` straight to FastAPI with no size limit beyond your own disk and RAM.
 The same applies to any server you control: the limit is Vercel's, not Prism's.
-
-## License
-
-MIT
