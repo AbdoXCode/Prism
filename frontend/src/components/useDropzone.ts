@@ -1,13 +1,5 @@
 import { useCallback, useRef, useState } from "react";
 
-/**
- * Vercel Functions cap request bodies at 4.5 MB. The PDF is POSTed to
- * /upload, so anything larger is rejected by the edge with an opaque 413
- * before our code ever runs. Check client-side to explain why.
- */
-const MAX_UPLOAD_BYTES = 4.5 * 1024 * 1024;
-const MAX_UPLOAD_LABEL = "4.5 MB";
-
 /** Drag-and-drop + file picker for PDFs. */
 export function useDropzone(onFiles: (files: File[]) => void) {
   const [dragging, setDragging] = useState(false);
@@ -22,16 +14,7 @@ export function useDropzone(onFiles: (files: File[]) => void) {
         (f) => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"),
       );
       if (pdfs.length < all.length) alert("Only PDF files are allowed.");
-
-      const tooBig = pdfs.filter((f) => f.size > MAX_UPLOAD_BYTES);
-      if (tooBig.length > 0) {
-        alert(
-          `Too large — the limit is ${MAX_UPLOAD_LABEL} per file:\n` +
-            tooBig.map((f) => `• ${f.name}`).join("\n"),
-        );
-      }
-      const accepted = pdfs.filter((f) => f.size <= MAX_UPLOAD_BYTES);
-      if (accepted.length > 0) onFiles(accepted);
+      if (pdfs.length > 0) onFiles(pdfs);
     },
     [onFiles],
   );

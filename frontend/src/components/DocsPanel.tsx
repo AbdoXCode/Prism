@@ -81,7 +81,7 @@ export function DocsPanel({ docs, onFiles, compact = false, selectedKeys = [], o
         <span className="text-sm font-medium text-zinc-100">
           {dragging ? "Drop your PDF here" : "Upload a PDF"}
         </span>
-        <span className="text-xs text-zinc-400">Drag & drop or click to browse · PDF only · max 4.5 MB</span>
+        <span className="text-xs text-zinc-400">Drag & drop or click to browse · PDF only</span>
         <input ref={inputRef} type="file" accept="application/pdf,.pdf" multiple className="hidden" onChange={onInputChange} />
       </button>
 
