@@ -47,13 +47,15 @@ class QuestionRequest(BaseModel):
 @app.get("/")
 def root():
     return {
+        "status": "200 OK",
         "message": "RAG API is running"
     }
 
 @app.get("/health")
 def health_check():
     return {
-        "status": "healthy"
+        "status": "200 OK",
+        "message": "RAG API is healthy"
     }
 
 @app.post("/ask")
