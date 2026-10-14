@@ -274,9 +274,12 @@ export default function App() {
       <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 gap-4 p-3 sm:p-4">
         {/* Sidebar (desktop). Collapsed state stays as a rail so the panel is always
             recoverable — the only way back would otherwise be a button inside the
-            panel you just hid. */}
+            panel you just hid.
+            overflow-hidden (not -auto): the aside must not become a second scroll
+            container. The doc list inside DocsPanel is the only scroller, so there's
+            exactly one scrollbar and it sits inside the menu. */}
         {docsOpen ? (
-          <aside className="hidden w-80 shrink-0 overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-950 p-4 slim-scroll lg:block">
+          <aside className="hidden min-h-0 w-80 shrink-0 flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 p-4 lg:flex">
             <DocsPanel
               docs={docs}
               onFiles={handleFiles}
@@ -287,7 +290,7 @@ export default function App() {
               disabled={streaming}
               onCollapse={() => setDocsOpen(false)}
             />
-            <div className="mt-4 rounded-xl bg-zinc-900 p-3 text-[11px] leading-relaxed text-zinc-500">
+            <div className="mt-4 shrink-0 rounded-xl bg-zinc-900 p-3 text-[11px] leading-relaxed text-zinc-500">
               <p className="mb-1 font-semibold text-zinc-400">How it works</p>
               <ol className="list-decimal space-y-0.5 pl-4">
                 <li>Drop in your PDFs — nothing else to set up.</li>

@@ -45,7 +45,7 @@ export function DocsPanel({ docs, onFiles, compact = false, selectedKeys = [], o
   const { dragging, inputRef, handlers, onInputChange } = useDropzone(onFiles);
 
   return (
-    <div className={compact ? "" : "flex h-full flex-col"}>
+    <div className={compact ? "" : "flex min-h-0 flex-1 flex-col"}>
       {/* Panel header — the single home of the collapse control. */}
       <div className="mb-3 flex items-center justify-between gap-2">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
@@ -85,7 +85,16 @@ export function DocsPanel({ docs, onFiles, compact = false, selectedKeys = [], o
         <input ref={inputRef} type="file" accept="application/pdf,.pdf" multiple className="hidden" onChange={onInputChange} />
       </button>
 
-      <div className={compact ? "mt-3" : "mt-4 min-h-0 flex-1 overflow-y-auto slim-scroll"}>
+      {/* The list is the sole scroll region in both modes: flex-bounded on
+          desktop, max-height-bounded in the mobile drawer. Scrollbar stays
+          inside the menu instead of on the page/panel edge. */}
+      <div
+        className={
+          compact
+            ? "mt-3 max-h-[45vh] overflow-y-auto slim-scroll"
+            : "mt-4 min-h-0 flex-1 overflow-y-auto slim-scroll"
+        }
+      >
         {docs.some((d) => d.status === "ready") && (
           <p className="mb-2 text-[11px] text-zinc-500">
             Tick one or more files to chat with them.
